@@ -63,7 +63,7 @@ class Jogo {
       textAlign(CENTER)
       fill('#FFD700')
       textSize(20)
-      text('Hipsta estava brincando com seus amigos no cemiterio,\n quando lembrou que havia deixado a panela de pressao no fogo.\n Agora ela deve evitar seus amigos e ir direto para a casa \nantes que a panela exploda!\n\n\nutilize as setas do teclado para mover a personagem', width / 2, height / 2 - 200);
+      text('Hipsta estava brincando com seus amigos no cemiterio,\n quando lembrou que havia deixado a panela de pressao no fogo.\n Agora ela deve correr antes que a panela exploda!\n\n\nutilize as setas do teclado para mover a personagem', width / 2, height / 2 - 200);
       textAlign(CENTER)
       textSize(35)
       textStyle(BOLD)
