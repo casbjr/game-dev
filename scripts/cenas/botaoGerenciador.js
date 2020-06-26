@@ -1,18 +1,23 @@
 class BotaoGerenciador {
-  constructor(texto, x, y) {
+  constructor(texto, posX, posY) {
     this.texto = texto;
-    this.x = x;
-    this.y = y;
+    this.posX = posX;
+    this.posY = posY;
     this.botao = createButton(this.texto);
     this.botao.mousePressed(() => this._alteraCena());
-    this.botao.addClass('botao-tela-inicial');
+    this.botao.addClass("botao-tela-inicial");
   }
+
   draw() {
-    this.botao.position(this.x, this.y);
+    this.botao.position(this.posX, this.posY);
     this.botao.center('horizontal');
+    
   }
+  
   _alteraCena() {
     this.botao.remove();
-    cenaAtual = 'jogo';
+    somEntrada.stop();
+    trilhaSonora.loop();
+    cenaAtual='jogo';
   }
 }

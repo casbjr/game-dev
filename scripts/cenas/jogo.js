@@ -1,131 +1,129 @@
 class Jogo {
   constructor() {
-    this.inimigoAtual = 0;
+    this.indice = 0;
+    this.mapa = fita.mapa;
+    this.dificuldade = fita.dificuldade[0];
+    this.cfgVida = fita.configuracao;
   }
 
   setup() {
-    mode = 0;
-    fimDeJogo = false;
-    imagemTitulo = new Cenario(imagemTitulo, 0);
-    imagemcenario1 = new Cenario(imagemcenario1, 0);
-    imagemcenario2 = new Cenario(imagemcenario2, 0);
-    imagemcenario3 = new Cenario(imagemcenario3, 0);
-    imagemcenario4 = new Cenario(imagemcenario4, vCenario4);
-    imagemcenario5 = new Cenario(imagemcenario5, vCenario5);
-    imagemcenario6 = new Cenario(imagemcenario6, vCenario6);
-    imagemcenario7 = new Cenario(imagemcenario7, vCenario7);
-    imagemcenario8 = new Cenario(imagemcenario8, vCenario8);
-    imagemcenario9 = new Cenario(imagemcenario9, vCenario9);
+    cenario1 = new Cenario(imagemCenario1, 5);
+    cenario2 = new Cenario(imagemCenario2, 5);
+    cenario3 = new Cenario(imagemCenario3, 2);
+    cenario4 = new Cenario(imagemCenario4, 2);
+    cenario5 = new Cenario(imagemCenario5, 5);
+    cenario6 = new Cenario(imagemCenario6, 7);
+    cenario7 = new Cenario(imagemCenario7, 7);
+
+    cenarios.push(cenario1, cenario2, cenario3, cenario4, cenario5, cenario6, cenario7);
+
+    splashGame = new Splash(imagemSplash);
+
+    personagem = new Personagem(imagemPersonagem, 0, 72, 132, 162, 220, 270);
+    const inimigo = new Inimigo(imagemInimigo, width - 52, 72, 70, 67, 105, 100, 10);
+    const inimigoTroll = new Inimigo(imagemInimigoTroll, width + 300, 30, 250, 250, 400, 400, 10);
+    const inimigoVoador = new Inimigo(imagemInimigoVoador, width + 300, 300, 120, 90, 200, 150, 10);
+
+
+    npc1 = new Npc(imagemNpc, width - 401, -100, 28, 25.33, 28, 25.33);
+    npc2 = new Npc(imagemNpc, width - 208, -200, 28, 25.33, 28, 25.33);
+    npc3 = new Npc(imagemNpc, width - 108, -350, 28, 25.33, 28, 25.33);
+    npc4 = new Npc(imagemNpc, width - 302, -100, 28, 25.33, 28, 25.33);
+
+    npcs.push(npc1, npc2, npc3, npc4);
+
+    crystal = new Crystal(imagemCristal, width - 28, -300, 33, 70, 17.37, 29.33);
+
+    inimigos.push(inimigo, inimigoTroll, inimigoVoador);
+
     pontuacao = new Pontuacao();
-    personagem = new Personagem(matrizPersonagem, imagemPersonagem, 0, 40, 110, 135, 220, 270);
-    const inimigo = new Inimigo(matrizInimigo, imagemInimigo, width - 52, 40, 100, 100, 175, 175, 10, 100);
-    const inimigoVoador = new Inimigo(matrizInimigoVoador, imagemInimigoVoador, width - 52, 200, 100, 75, 200, 150, 10, 100)
-    const inimigoGrande = new Inimigo(matrizInimigoGrande, imagemInimigoGrande, width * 2, 40, 100, 150, 350, 550, 10, 100)
-
-    inimigos.push(inimigo)
-    inimigos.push(inimigoGrande)
-    inimigos.push(inimigoVoador)
-    somDoInicio.loop();
-    somDoInicio.setVolume(0.3);
-
+    vida = new Vida(this.cfgVida.vidaMaxima,this.cfgVida.vidaInicial);
+    
   }
-  keyPressed(key, keyCode) {
-    if (!fimDeJogo && (key === 'ArrowUp' || keyCode === 87)) {
-      if (personagem.pula());
-    } else if (fimDeJogo && key === 'Enter') {
-      window.location.reload();
-    }
-    if (!fimDeJogo && (key === 'ArrowLeft' || keyCode === 65)) {
-      personagem.atras();
-    }
-    if (!fimDeJogo && (key === 'ArrowRight' || keyCode === 68)) {
-      personagem.frente();
-    }
-    if (mode == 0 && cenaAtual === 'jogo' && keyCode === 32) {
-      mode = 1,
-        somDoJogo.loop(),
-        somDoJogo.setVolume(0.3, .1);
-    }
-  }
+
   draw() {
-    clear();
-    if (mode == 0) {
-      somDoJogo.stop()
-      //     imagemTitulo.exibe();
-      imagemcenario1.exibe();
-      imagemcenario2.exibe();
-      imagemcenario3.exibe();
-      imagemcenario4.exibe();
-      imagemcenario5.exibe();
-      imagemcenario6.exibe();
-      //      image(seta,0, 0, 0);
-      //      image(tecla,0,0);
-      textAlign(CENTER)
-      fill('#FFD700')
-      textSize(20)
-      text('Hipsta estava brincando com seus amigos no cemiterio,\n quando lembrou que havia deixado a panela de pressao no fogo.\n Agora ela deve correr antes que a panela exploda!\n\n\nutilize as setas do teclado para mover a personagem', width / 2, height / 2 - 200);
-      textAlign(CENTER)
-      textSize(35)
-      textStyle(BOLD)
-      text('pressione backspace para iniciar', width / 2, height / 2 + 50)
-      //
-      image(imagemSetas, width / 2 + 250, height / 2 - 300 / 2);
-      image(imagemteclas, width / 2 - 450, height / 2 - 300 / 2);
+    cenarios.map(function(cenario) {
+      cenario.exibe();
+      cenario.move();
+    });
+    
+    npcs.map(function(npc) {
+      npc.exibe();
+      npc.move();
+    });
+    
+    vida.draw();
+    
+    
+    if (keyIsDown(LEFT_ARROW))
+      personagem.anda(0);
+    if (keyIsDown(RIGHT_ARROW))
+      personagem.anda(1);
 
-      //
+    personagem.exibe();
+    personagem.aplicaGravidade();
+
+    crystal.exibe();
+    crystal.move();
+
+    pontuacao.exibe();
+    pontuacao.adicionarPonto();
+
+    if (personagem.estaColidindo(crystal)) {
+      pontuacao.adicionarCristal();
+      
+      if (pontuacao.cristaisVida == this.cfgVida.limiteCristais){
+        pontuacao.cristaisVida = 0;
+        somGanhaVida.play();
+        vida.ganhaVida();
+      }
+      
+      crystal.remove();
+      gc.play();
     }
-    if (mode == 1) {
-      somDoInicio.stop();
-      imagemcenario1.exibe();
-      imagemcenario2.exibe();
-      imagemcenario3.exibe();
-      imagemcenario4.exibe();
-      imagemcenario5.exibe();
-      imagemcenario6.exibe();
-      imagemcenario7.exibe();
-      imagemcenario8.exibe();
-      imagemcenario9.exibe();
-      imagemcenario4.move();
-      imagemcenario5.move();
-      imagemcenario6.move();
-      imagemcenario7.movecapela();
-      imagemcenario8.move();
-      imagemcenario9.move();
-      pontuacao.exibe()
-      pontuacao.adicionaPonto()
-      personagem.exibe();
-      personagem.aplicaGravidade();
 
-      const inimigo = inimigos[this.inimigoAtual];
-      const inimigoVisivel = inimigo.x < -inimigo.largura;
+    if (inimTela == false) this.inimigoAtual = getNumber(this.inimigoAtual, inimigos.length);
 
-      inimigo.exibe()
-      inimigo.move()
+    //console.log('inimigos.length: ' + inimigos.length);
+    //console.log(this.inimigoAtual);
+    //console.log(this.dificuldade);
+    //console.log(this.dificuldade.velocidadeMob);
+    
+    inimigos[this.inimigoAtual].velocidade = (10 + Math.floor((20 - 10) * Math.random())) * this.dificuldade.velocidadeMob;
+    inimigos[this.inimigoAtual].exibe();
+    inimigos[this.inimigoAtual].move()
 
-      if (inimigoVisivel) {
-        this.inimigoAtual = getRandomEnemy();
-        inimigo.velocidade = parseInt(random(10, 30));
+    if (personagem.estaColidindo(inimigos[this.inimigoAtual])) {
+      
+      if (inimigos[this.inimigoAtual].jaColidiu === false) {
+        vida.perdeVida();
+        somPerdeVida.play();
+        inimigos[this.inimigoAtual].jaColidiu = true;
       }
 
-
-
-      if (personagem.estaColidindo(inimigo)) {
-        gameOver()
-        noLoop()
+      if (vida.vidaAtual <= 0) {
+        GameOver();
       }
+    }
 
+    inimTela = true;
+
+    if (inimigos[this.inimigoAtual].isShow == false) {
+      inimigos[this.inimigoAtual].isShow = true;
+      inimTela = false;
     }
   }
-  gameOver() {
-    background('rgba(0%,0%,0%,.80)');
-    fill("fff");
-    image(imagemGameOver, width / 2 - 412 / 2, height / 2 - 78 / 2);
-    somDoJogo.stop()
-    somMorreu.play();
-    somMorreu.setVolume(0.1, 0.1)
-    textAlign(CENTER)
-    textSize(32);
-    text("pressione ENTER para tentar novamente.", width / 2, height / 2 + 150)
-    fimDeJogo = true;
+
+  keyPressed(key) {
+    if (key === 'ArrowUp') {
+      personagem.pula(somDoPulo);
+    }
+    if (key === 'Enter') {
+      if (stage === 1) {
+        window.location.reload();
+      } else {
+        stage = 1;
+      }
+    }
   }
 }
