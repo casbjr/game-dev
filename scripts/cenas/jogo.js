@@ -49,7 +49,7 @@ class Jogo {
     }
     if (mode == 0 && cenaAtual === 'jogo' && keyIsPressed === true) {
       mode = 1,
-        somDoJogo.setVolume(0.3, 0.1)//,
+        somDoJogo.setVolume(0.3, 0.1),
         somDoJogo.loop();
     }
   }
