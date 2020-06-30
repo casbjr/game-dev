@@ -2,128 +2,261 @@ class Jogo {
   constructor() {
     this.indice = 0;
     this.mapa = fita.mapa;
-    this.dificuldade = fita.dificuldade[0];
-    this.cfgVida = fita.configuracao;
+    this.inimigoAtual = 0;
   }
 
   setup() {
-    cenario1 = new Cenario(imagemCenario1, 5);
-    cenario2 = new Cenario(imagemCenario2, 5);
-    cenario3 = new Cenario(imagemCenario3, 2);
-    cenario4 = new Cenario(imagemCenario4, 2);
-    cenario5 = new Cenario(imagemCenario5, 5);
-    cenario6 = new Cenario(imagemCenario6, 7);
-    cenario7 = new Cenario(imagemCenario7, 7);
-
-    cenarios.push(cenario1, cenario2, cenario3, cenario4, cenario5, cenario6, cenario7);
-
-    splashGame = new Splash(imagemSplash);
-
-    personagem = new Personagem(imagemPersonagem, 0, 72, 132, 162, 220, 270);
-    const inimigo = new Inimigo(imagemInimigo, width - 52, 72, 70, 67, 105, 100, 10);
-    const inimigoTroll = new Inimigo(imagemInimigoTroll, width + 300, 30, 250, 250, 400, 400, 10);
-    const inimigoVoador = new Inimigo(imagemInimigoVoador, width + 300, 300, 120, 90, 200, 150, 10);
-
-
-    npc1 = new Npc(imagemNpc, width - 401, -100, 28, 25.33, 28, 25.33);
-    npc2 = new Npc(imagemNpc, width - 208, -200, 28, 25.33, 28, 25.33);
-    npc3 = new Npc(imagemNpc, width - 108, -350, 28, 25.33, 28, 25.33);
-    npc4 = new Npc(imagemNpc, width - 302, -100, 28, 25.33, 28, 25.33);
-
-    npcs.push(npc1, npc2, npc3, npc4);
-
-    crystal = new Crystal(imagemCristal, width - 28, -300, 33, 70, 17.37, 29.33);
-
-    inimigos.push(inimigo, inimigoTroll, inimigoVoador);
-
+    mode = 0;
+    fimDeJogo = false;
+    vida = new Vida(fita.configuracoes.vidaMaxima, fita.configuracoes.vidaInicial)
+    imagemTitulo = new Cenario(imagemTitulo, 0);
+    imagemcenario1 = new Cenario(imagemcenario1, 0);
+    imagemcenario2 = new Cenario(imagemcenario2, 0);
+    imagemcenario3 = new Cenario(imagemcenario3, 0);
+    imagemcenario4 = new Cenario(imagemcenario4, vCenario4);
+    imagemcenario5 = new Cenario(imagemcenario5, vCenario5);
+    imagemcenario6 = new Cenario(imagemcenario6, vCenario6);
+    imagemcenario7 = new Cenario(imagemcenario7, vCenario7);
+    imagemcenario8 = new Cenario(imagemcenario8, vCenario8);
+    imagemcenario9 = new Cenario(imagemcenario9, vCenario9);
+    imagemFinal = new Cenario(imagemFinal, 0);
     pontuacao = new Pontuacao();
-    vida = new Vida(this.cfgVida.vidaMaxima,this.cfgVida.vidaInicial);
+    personagem = new Personagem(matrizPersonagem, imagemPersonagem, 0, 50, 110, 135, 220, 270);
+    const inimigo = new Inimigo(matrizInimigo, imagemInimigo, width - 52, 50, 100, 100, 175, 175, 10, 100);
+    const inimigoVoador = new Inimigo(matrizInimigoVoador, imagemInimigoVoador, width - 52, 200, 100, 75, 200, 150, 10, 100)
+    const inimigoGrande = new Inimigo(matrizInimigoGrande, imagemInimigoGrande, width * 2, 50, 100, 150, 350, 550, 10, 100)
+    const inimigo2 = new Inimigo(matrizInimigo, imagemInimigo, width - 52, 50, 100, 100, 175, 175, 10, 1000);
+    const inimigoVoador2 = new Inimigo(matrizInimigoVoador, imagemInimigoVoador, width - 52, 200, 100, 75, 200, 150, 10, 15000)
+    const inimigoGrande2 = new Inimigo(matrizInimigoGrande, imagemInimigoGrande, width * 2, 50, 100, 150, 350, 550, 10, 2000)
+    extra = new Extra(matrizChapeu, imagemVida, 100, 350, 75, 100, 500, 500);
     
-  }
+    inimigos.push(inimigo)
+    inimigos.push(inimigoGrande)
+    inimigos.push(inimigoVoador)
+    inimigos.push(inimigo2);
+    inimigos.push(inimigoVoador2);
+    inimigos.push(inimigoGrande2);
+    somDoInicio.loop();
+    somDoInicio.setVolume(0.3);
 
+  }
+  keyPressed(key, keyCode) {
+    if (!fimDeJogo && ((keyIsDown(38)) || (keyIsDown(87)))) {
+      if (personagem.pula());
+    }
+    if (fimDeJogo && key === 'Enter') {
+      window.location.reload();
+    }
+    if (mode == 0 && cenaAtual === 'jogo' && keyIsPressed === true) {
+      mode = 1,
+        somDoJogo.setVolume(0.3, 0.1)//,
+        somDoJogo.loop();
+    }
+  }
   draw() {
-    cenarios.map(function(cenario) {
-      cenario.exibe();
-      cenario.move();
-    });
-    
-    npcs.map(function(npc) {
-      npc.exibe();
-      npc.move();
-    });
-    
-    vida.draw();
-    
-    
-    if (keyIsDown(LEFT_ARROW))
-      personagem.anda(0);
-    if (keyIsDown(RIGHT_ARROW))
-      personagem.anda(1);
+    clear();
+    if (mode == 0) {
+      somDoJogo.stop()
+      imagemcenario1.exibe();
+      imagemcenario2.exibe();
+      imagemcenario3.exibe();
+      imagemcenario4.exibe();
+      imagemcenario5.exibe();
+      imagemcenario6.exibe();
+      textAlign(CENTER)
+      fill('#ff7518')
+      textFont(fonteTelaInicial);
+      textSize(45)
+      text('Uma feiticeira maligna transformou todos os habitantes\n de Alurownsville em monstros de Halloween. \n Ajude Hipsta a chegar em casa a tempo \nde criar uma magia para salvar a todos!', width / 2, height / 2 - 250);
+      textAlign(CENTER)
+      textSize(70)
+      textStyle(BOLD)
+      text('pressione qualquer tecla para iniciar', width / 2, height / 2 +30)
+      textFont('Helvetica')
+      textSize(15)
+      fill("whitesmoke");
+      text('← ↑ → ou "a", "w", "s" movem a personagem\npressione ↑↑ para dar saltos duplos\n\ncolete os chapéus no seu caminho, eles valem vidas extras', width / 2, height / 2 +200);
 
-    personagem.exibe();
-    personagem.aplicaGravidade();
+//      image(imagemSetas, width / 2 + 250, height / 2 - 300 / 2);
+//      image(imagemteclas, width / 2 - 450, height / 2 - 300 / 2);
+    }
+    if (mode == 1) {
+      if ((keyIsDown(37)) || (keyIsDown(65)))
+        personagem.sideways(0);
+      if ((keyIsDown(39)) || (keyIsDown(68)))
+        personagem.sideways(1);
 
-    crystal.exibe();
-    crystal.move();
-
-    pontuacao.exibe();
-    pontuacao.adicionarPonto();
-
-    if (personagem.estaColidindo(crystal)) {
-      pontuacao.adicionarCristal();
+      somDoInicio.stop();
+      imagemcenario1.exibe();
+      imagemcenario2.exibe();
+      imagemcenario3.exibe();
+      imagemcenario4.exibe();
+      imagemcenario5.exibe();
+      imagemcenario6.exibe();
+      imagemcenario7.exibe();
+      imagemcenario8.exibe();
+      imagemcenario9.exibe();
+      imagemcenario4.move();
+      imagemcenario5.move();
+      imagemcenario6.move();
+      imagemcenario7.movecapela();
+      imagemcenario8.move();
+      imagemcenario9.move();
+      vida.draw();
+      textFont(fonteGO);
+      pontuacao.exibe()
+      pontuacao.adicionaPonto()
       
-      if (pontuacao.cristaisVida == this.cfgVida.limiteCristais){
-        pontuacao.cristaisVida = 0;
-        somGanhaVida.play();
-        vida.ganhaVida();
+      extra.exibe();
+      extra.move();
+      
+      if(personagem.estaColidindo(extra)){
+        console.log('colidiu extra');  
+        extra.remove()
+        somColecionavel.setVolume(0.3);
+        somColecionavel.play();
+        vida.ganhaVida()
+      
       }
       
-      crystal.remove();
-      gc.play();
-    }
-
-    if (inimTela == false) this.inimigoAtual = getNumber(this.inimigoAtual, inimigos.length);
-
-    //console.log('inimigos.length: ' + inimigos.length);
-    //console.log(this.inimigoAtual);
-    //console.log(this.dificuldade);
-    //console.log(this.dificuldade.velocidadeMob);
-    
-    inimigos[this.inimigoAtual].velocidade = (10 + Math.floor((20 - 10) * Math.random())) * this.dificuldade.velocidadeMob;
-    inimigos[this.inimigoAtual].exibe();
-    inimigos[this.inimigoAtual].move()
-
-    if (personagem.estaColidindo(inimigos[this.inimigoAtual])) {
       
-      if (inimigos[this.inimigoAtual].jaColidiu === false) {
+      personagem.exibe();
+      personagem.aplicaGravidade();
+      const linhaAtual = this.mapa[this.indice];
+      const inimigo = inimigos[this.inimigoAtual];
+      const inimigoVisivel = inimigo.x < -inimigo.largura;
+      inimigo.velocidade = linhaAtual.velocidade;
+
+      inimigo.exibe()
+      inimigo.move()  
+      
+     if (inimigoVisivel) {
+      this.inimigoAtual++;
+      if (this.inimigoAtual > 2) {
+        this.inimigoAtual = 0;
+      }
+      inimigo.velocidade = parseInt(random(10, 30));
+    }
+    const inimigo2 = inimigos[3]; // poring 2
+    const inimigoVisivel2 = inimigo2.x < -inimigo2.largura;
+
+    inimigo2.velocidade = parseInt(random(5, 25));
+    inimigo2.delay = 1000;
+    inimigo2.exibe();
+    inimigo2.move();
+
+    const inimigo3 = inimigos[4]; // troll 2
+    const inimigoVisivel3 = inimigo3.x < -inimigo3.largura;
+
+    inimigo3.velocidade = parseInt(random(7, 15));
+    inimigo3.delay = 5000;
+    inimigo3.exibe();
+    inimigo3.move();
+
+    const inimigo4 = inimigos[5]; // voador 2
+    const inimigoVisivel4 = inimigo4.x < -inimigo4.largura;
+
+    inimigo4.velocidade = parseInt(random(5, 20));
+    inimigo4.delay = 10000;
+    inimigo4.exibe();
+    inimigo4.move();
+
+      if (personagem.estaColidindo(inimigo)) {
         vida.perdeVida();
-        somPerdeVida.play();
-        inimigos[this.inimigoAtual].jaColidiu = true;
+        personagem.tornarInvencivel();
+        somAtaque.setVolume(0.4);
+        somAtaque.play();
+        if (vida.vidas == 0) {
+          vida.perdeVida();
+          noLoop();
+          pontuacao.exibe();
+          gameOver();
+        }
       }
+       if (personagem.estaColidindo(inimigo2)) {
+        vida.perdeVida();
+        personagem.tornarInvencivel();
+        somAtaque.setVolume(0.3);
+        somAtaque.play();
 
-      if (vida.vidaAtual <= 0) {
-        GameOver();
+      if (vida.vidas === 0) {
+         vida.perdeVida();
+          noLoop();
+          pontuacao.exibe();
+          gameOver();
       }
     }
 
-    inimTela = true;
+    if (personagem.estaColidindo(inimigo3)) {
+        vida.perdeVida();
+        personagem.tornarInvencivel();
+        somAtaque.setVolume(0.3);
+        somAtaque.play();
 
-    if (inimigos[this.inimigoAtual].isShow == false) {
-      inimigos[this.inimigoAtual].isShow = true;
-      inimTela = false;
+      if (vida.vidas === 0) {
+         vida.perdeVida();
+          noLoop();
+          pontuacao.exibe();
+          gameOver();
+      }
     }
+
+    if (personagem.estaColidindo(inimigo4)) {
+        vida.perdeVida();
+        personagem.tornarInvencivel();
+        somAtaque.setVolume(0.3);
+        somAtaque.play();
+
+      if (vida.vidas === 0) {
+         vida.perdeVida();
+          noLoop();
+          pontuacao.exibe();
+          gameOver();
+      }
+    }  
+
+    }
+   if (mode == 2) {  
+    //venceu()
+     noLoop();
+    somDoJogo.stop();
+    somAtaque.stop();     
+    somMorreu.stop();
+    background('rgba(0%,0%,0%,.80)');
+    fill("whitesmoke");
+    imagemFinal.exibe();
+    somVenceu1.setVolume(0.35)
+    somVenceu1.play();
+    if(!somVenceu.isPlaying()){
+      somVenceu.setVolume(0.2)
+      somVenceu.play()} 
+    textAlign(CENTER)
+    textFont(fonteTelaInicial);
+    textSize(50);
+    text("Com a sua ajuda, Hipsta chegou em casa!\n Agora, ela pode salvar todos os seus amigos.", 0, height / 5 *2, width);
+    text("Pressione 'ENTER' para jogar novamente.", width / 2, height / 5 * 3+30)    
+    fimDeJogo = true;
+ 
+   }
+
+  }
+  gameOver() {
+    background('rgba(0%,0%,0%,.80)');
+    fill("#ff7518");
+///    image(imagemGameOver, width / 2 - 412 / 2, height / 2 - 78 / 2);
+    somDoJogo.stop()
+    somMorreu.setVolume(0.3, 0.1)
+    somMorreu.play();
+    textAlign(CENTER)
+    textSize(50);
+    textFont(fonteGO);
+    text(`Hipsta fez ${parseInt(pontuacao.pontos)} pontos`, 0, height / 2 - 100, width);
+    textFont(fonteTelaInicial);
+    text("Pressione 'ENTER' para tentar novamente.", width / 2, height / 2 + 130)
+    textFont(fonteGO);
+    textSize(150);
+    text("GAME OVER", width / 2, height / 2 +50)
+    fimDeJogo = true;
   }
 
-  keyPressed(key) {
-    if (key === 'ArrowUp') {
-      personagem.pula(somDoPulo);
-    }
-    if (key === 'Enter') {
-      if (stage === 1) {
-        window.location.reload();
-      } else {
-        stage = 1;
-      }
-    }
-  }
 }

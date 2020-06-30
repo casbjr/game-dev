@@ -12,10 +12,9 @@ class TelaInicial {
   _text() {
     textFont(fonteTelaInicial);
     textAlign(CENTER);
-    textSize(50);
-    text('As aventuras de', width / 2, height / 3);
-    textSize(150);
-    text('Hipsta', width / 2, height / 5 * 3);
+    fill('#ff7518')
+    textSize(175);
+    text('Corra, Hipsta!', width / 2, height / 5 * 2);
   }
   _botao() {
     botaoGerenciador.y = height / 7 * 5;

@@ -1,37 +1,29 @@
 function setup() {
   createCanvas(windowWidth, windowHeight);
-
-  frameRate(30);
-  masterVolume(0.1);
-
-  botaoGerenciador = new BotaoGerenciador('INICIAR', width / 2, height / 2);
-  telaInicial = new TelaInicial();
   jogo = new Jogo();
-
   jogo.setup();
-
+  frameRate(35);
+  telaInicial = new TelaInicial();
   cenas = {
-    jogo: jogo,
-    telaInicial: telaInicial
-  };
-
-
+    jogo,
+    telaInicial
+  }
+  botaoGerenciador = new BotaoGerenciador('Iniciar',width/2,height/2);
 }
 
 function keyPressed() {
-  jogo.keyPressed(key);
+  jogo.keyPressed(key, keyCode)
 }
+
 
 function draw() {
   cenas[cenaAtual].draw();
 }
 
-/*
-  if (stage == 0) {
-    splashGame.draw();
-  }
+function getRandomEnemy(){
+  return parseInt(random(0,inimigos.length));
+}
 
-  if (stage == 1) {
-    jogo.draw();
-  }
-*/
+function gameOver() {
+  jogo.gameOver()
+}
