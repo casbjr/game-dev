@@ -56,7 +56,9 @@ class Jogo {
   draw() {
     clear();
     if (mode == 0) {
-      somDoJogo.stop()
+      somDoJogo.stop();
+      somDoInicio.loop();
+      somDoInicio.setVolume(0.3);
       imagemcenario1.exibe();
       imagemcenario2.exibe();
       imagemcenario3.exibe();
