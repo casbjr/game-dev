@@ -2,7 +2,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   jogo = new Jogo();
   jogo.setup();
-  frameRate(35);
+  frameRate(40);
   telaInicial = new TelaInicial();
   cenas = {
     jogo,
